@@ -6,7 +6,7 @@ export const Fonts = {
   family: {
     regular: fonts.dmSantStatic.fontFamily,
     regularItalic: fonts.dmSantItalic.fontFamily,
-    secondary: fonts.bricoladeBold.fontFamily,
+    secondary: fonts.bricolade.fontFamily,
   },
   size: {
     h1: 96,
