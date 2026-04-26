@@ -1,10 +1,52 @@
+import { findCoordsByCity } from "@/api/findCoordsByCity";
+import { loadWeeklyTemp } from "@/api/loadWeeklyTemp";
 import { colors } from "@/constants/colors";
-import React from "react";
+import { weekDayNames } from "@/constants/weekDayNames";
+import { actions as cityTempActions } from "@/store/cityTempSlice";
+import { useAppDispatch, useAppSelector } from "@/types/reduxTypes";
+import { WeeklyTemp } from "@/types/WeeklyTemp";
+import { fetchData } from "@/utils/createCustomSlice";
+import { normolizeTempData } from "@/utils/normolizeTempData";
+import React, { useState } from "react";
 import { Image, StyleSheet, TextInput, View } from "react-native";
 
 const searchIcon = require("@/assets/images/icon-search.png");
 
-const InputSearch = () => {
+type InputSearchType = {
+  setTemporaryCoords: () => void;
+};
+
+export default function InputSearch({ setTemporaryCoords }) {
+  const locationName = useAppSelector((state) => state.locationName);
+  const weeklyTemp = useAppSelector((state) => state.weeklyTemp);
+  const dispatch = useAppDispatch();
+  const [searchLocation, setSearchLocation] = useState<string>("");
+
+  const handleChangeLocation = () => {
+    const loadTemp = async () => {
+      const newCityCoords = await findCoordsByCity(searchLocation);
+      const formattedData = {
+        latitude: newCityCoords.latitude,
+        longitude: newCityCoords.longitude,
+        country: newCityCoords.country,
+        city: searchLocation,
+        timezone: newCityCoords.timezone,
+      };
+
+      setTemporaryCoords(newCityCoords);
+
+      const newCityTempResponse = await loadWeeklyTemp(
+        formattedData.latitude,
+        formattedData.longitude,
+      );
+
+      const newCityTemp = normolizeTempData(newCityTempResponse);
+
+      dispatch(cityTempActions.setCityTempData(newCityTemp));
+    };
+    loadTemp();
+  };
+
   return (
     <View style={styles.inputWrapper}>
       <Image source={searchIcon} style={styles.icon} />
@@ -12,10 +54,13 @@ const InputSearch = () => {
         style={styles.input}
         placeholder={" Search for a city"}
         placeholderTextColor={colors.textPlaceholder}
+        onChangeText={(newLocation) => setSearchLocation(newLocation)}
+        value={searchLocation}
+        onSubmitEditing={handleChangeLocation}
       />
     </View>
   );
-};
+}
 
 const styles = StyleSheet.create({
   inputWrapper: {
@@ -56,5 +101,3 @@ const styles = StyleSheet.create({
     color: colors.mainText,
   },
 });
-
-export default InputSearch;

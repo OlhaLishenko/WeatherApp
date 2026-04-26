@@ -1,17 +1,29 @@
 import ForecastList from "@/components/SearchScreen/ForecastList";
 import InputSearch from "@/components/SearchScreen/InputSearch";
 import { colors } from "@/constants/colors";
-import { useAppSelector } from "@/types/reduxTypes";
+import { Coordinates } from "@/types/Coordinates";
+import { useAppDispatch, useAppSelector } from "@/types/reduxTypes";
+import { TempState } from "@/types/TempState";
+import { fetchData } from "@/utils/createCustomSlice";
 import { LinearGradient } from "expo-linear-gradient";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Image, ScrollView, StyleSheet, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 const arrowIcon = require("@/assets/images/icon-arrow.png");
 
 export default function Forecast() {
-  const [searchCity, setSearchSity] = useState<string>("");
   const weeklyTemp = useAppSelector((state) => state.weeklyTemp);
+  const newCityTemp = useAppSelector((state) => state.newCityTemp);
+  const dispatch = useAppDispatch();
+  const [searchCity, setSearchSity] = useState<string>("");
+  const [temporaryCoords, setTemporaryCoords] = useState();
+  const [temporaryWeather, setTemporaryWeather] =
+    useState<TempState>(weeklyTemp);
+
+  // useEffect(() => {
+  //   dispatch(fetchData());
+  // }, []);
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
@@ -27,10 +39,12 @@ export default function Forecast() {
             <Image source={arrowIcon} style={{ width: 24, height: 24 }} />
             <Text style={styles.navText}>Weather</Text>
           </View>
-          <InputSearch />
-          {weeklyTemp.data.map((day) => (
-            <ForecastList tempData={day} key={day.weekDay} />
-          ))}
+          <InputSearch setTemporaryCoords={setTemporaryCoords} />
+          <View style={{ flex: 1, flexDirection: "column", gap: 20 }}>
+            {newCityTemp.data.map((day) => (
+              <ForecastList tempData={day} key={day.weekDay} />
+            ))}
+          </View>
         </ScrollView>
       </LinearGradient>
     </SafeAreaView>

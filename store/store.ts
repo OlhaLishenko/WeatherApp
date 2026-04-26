@@ -3,12 +3,14 @@ import { coordinatesSlice } from "./coordinatesSlice";
 import { locationNameSlice } from "./locationNameSlice";
 import { weeklyTempSlice } from "./weeklyTempSlice";
 import { hourlyTempSlice } from "./hourlyTempSlice";
+import { cityTempSlice } from "./cityTempSlice";
 
 const rootReducer = combineSlices(
   locationNameSlice,
   coordinatesSlice,
   weeklyTempSlice,
   hourlyTempSlice,
+  cityTempSlice,
 );
 
 export const store = configureStore({

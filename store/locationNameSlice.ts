@@ -28,7 +28,12 @@ export const LoadCurrentLocationName = createAsyncThunk(
 export const locationNameSlice = createSlice({
   name: "locationName",
   initialState,
-  reducers: {},
+  reducers: {
+    set(state, action: PayloadAction<string>) {
+      state.city = action.payload;
+      state.country = null;
+    },
+  },
   extraReducers(builder) {
     builder.addCase(
       LoadCurrentLocationName.fulfilled,

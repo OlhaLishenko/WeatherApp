@@ -1,9 +1,9 @@
 import { findCurrentGeo } from "@/api/findCurrentGeo";
-import { Coordinates } from "@/types/Coordinates";
+import { Coordinates, CoordinatesState } from "@/types/Coordinates";
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { LocationGeocodedLocation } from "expo-location";
 
-const initialState: Coordinates = {
+const initialState: CoordinatesState = {
   coordinates: {
     latitude: 0,
     longitude: 0,
