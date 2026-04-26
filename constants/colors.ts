@@ -17,4 +17,6 @@ export const colors = {
   blueDark: "#1C1B33",
   secondaryBgBlue: "#2E335A",
   textPlaceholder: "#EBEBF599",
+
+  solid: "#E0D9FF",
 };

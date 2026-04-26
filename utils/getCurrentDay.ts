@@ -1,16 +1,16 @@
 export function getCurrentDay() {
   const days = [
-    "Sunday",
     "Monday",
     "Tuesday",
     "Wednesday",
     "Thursday",
     "Friday",
     "Saturday",
+    "Sunday",
   ];
   const today = new Date();
   const dayName = days[today.getDay()];
-  const dayNumber = today.getDay();
+  const dayNumber = today.getDay() === 0 ? 6 : today.getDay() - 1;
 
   return { dayName: dayName, dayNumber: dayNumber };
 }

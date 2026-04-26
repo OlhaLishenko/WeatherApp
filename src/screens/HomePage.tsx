@@ -1,10 +1,9 @@
 //#region imports
 import MenuMain from "@/components/MenuBar/MenuMain";
 import { colors } from "@/constants/colors";
-// import { actions as currentDayActions } from "@/store/currentDay";
 import { LoadCurrentLocationName } from "@/store/locationNameSlice";
+import { fetchData } from "@/store/weeklyTempSlice";
 import { useAppDispatch, useAppSelector } from "@/types/reduxTypes";
-import { fetchData } from "@/utils/createCustomSlice";
 import { getCurrentDay } from "@/utils/getCurrentDay";
 import { useEffect } from "react";
 import { Image, ImageBackground, StyleSheet, Text, View } from "react-native";
@@ -19,32 +18,13 @@ export default function HomePage() {
   const weeklyTemp = useAppSelector((state) => state.weeklyTemp);
   const dispatch = useAppDispatch();
 
-  const { latitude, longitude } = coordinates.coordinates;
+  const { latitude, longitude } = coordinates.data;
 
   useEffect(() => {
     if (!latitude || !longitude) return;
     const fetchInitData = async () => {
       await dispatch(LoadCurrentLocationName());
       await dispatch(fetchData());
-      // const temp = weeklyTemp;
-      // dispatch(actions.setData(temp));
-      // const currentWeeklyTemp = await loadWeeklyTemp(latitude, longitude);
-      // const tempData = currentWeeklyTemp.daily;
-      // const formattedData: WeeklyTemp[] = tempData.time.map(
-      //   (_: any, index: number) => ({
-      //     id: index,
-      //     weatherType: "weekly",
-      //     weekDay: weekDayNames[index],
-      //     temp: Math.round(tempData.temperature_2m_max[index]),
-      //     rainSum: tempData.rain_sum[index],
-      //     cloudCover: tempData.cloud_cover_mean[index],
-      //     windSpeed: tempData.wind_speed_10m_max[index],
-      //   }),
-      // );
-      // dispatch(weeklyTempActions.setWeeklyTempData(formattedData));
-      // catch {
-      //   dispatch(weeklyTempActions.setWeeklyTempError());
-      // }
     };
 
     fetchInitData();
@@ -52,8 +32,6 @@ export default function HomePage() {
 
   const currentDay = getCurrentDay();
   const currentTemp = weeklyTemp.data[currentDay.dayNumber]?.temp;
-
-  // console.log(locationName.city);
 
   return (
     <View style={{ flex: 1 }}>

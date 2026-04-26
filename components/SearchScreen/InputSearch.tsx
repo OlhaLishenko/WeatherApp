@@ -1,48 +1,20 @@
-import { findCoordsByCity } from "@/api/findCoordsByCity";
-import { loadWeeklyTemp } from "@/api/loadWeeklyTemp";
 import { colors } from "@/constants/colors";
-import { weekDayNames } from "@/constants/weekDayNames";
-import { actions as cityTempActions } from "@/store/cityTempSlice";
-import { useAppDispatch, useAppSelector } from "@/types/reduxTypes";
-import { WeeklyTemp } from "@/types/WeeklyTemp";
-import { fetchData } from "@/utils/createCustomSlice";
-import { normolizeTempData } from "@/utils/normolizeTempData";
+import { fetchNewLocation } from "@/store/searchCity";
+import { fetchNewCityTemp } from "@/store/searchCityTempSlice";
+import { useAppDispatch } from "@/types/reduxTypes";
 import React, { useState } from "react";
 import { Image, StyleSheet, TextInput, View } from "react-native";
 
 const searchIcon = require("@/assets/images/icon-search.png");
 
-type InputSearchType = {
-  setTemporaryCoords: () => void;
-};
-
-export default function InputSearch({ setTemporaryCoords }) {
-  const locationName = useAppSelector((state) => state.locationName);
-  const weeklyTemp = useAppSelector((state) => state.weeklyTemp);
+export default function InputSearch() {
   const dispatch = useAppDispatch();
   const [searchLocation, setSearchLocation] = useState<string>("");
 
   const handleChangeLocation = () => {
     const loadTemp = async () => {
-      const newCityCoords = await findCoordsByCity(searchLocation);
-      const formattedData = {
-        latitude: newCityCoords.latitude,
-        longitude: newCityCoords.longitude,
-        country: newCityCoords.country,
-        city: searchLocation,
-        timezone: newCityCoords.timezone,
-      };
-
-      setTemporaryCoords(newCityCoords);
-
-      const newCityTempResponse = await loadWeeklyTemp(
-        formattedData.latitude,
-        formattedData.longitude,
-      );
-
-      const newCityTemp = normolizeTempData(newCityTempResponse);
-
-      dispatch(cityTempActions.setCityTempData(newCityTemp));
+      await dispatch(fetchNewLocation(searchLocation));
+      await dispatch(fetchNewCityTemp());
     };
     loadTemp();
   };

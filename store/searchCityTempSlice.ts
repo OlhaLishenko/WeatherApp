@@ -1,5 +1,4 @@
 import { loadWeeklyTemp } from "@/api/loadWeeklyTemp";
-import { Coordinates } from "@/types/Coordinates";
 import { State } from "@/types/State";
 import { WeeklyTemp } from "@/types/WeeklyTemp";
 import { createCustomSlice } from "@/utils/createCustomSlice";
@@ -13,11 +12,11 @@ const initialState: State<WeeklyTemp[]> = {
   error: null,
 };
 
-export const fetchData = createAsyncThunk(
-  "fetch/weeklyTemp",
+export const fetchNewCityTemp = createAsyncThunk(
+  "fetch/newCityTemp",
   async (_, { getState }) => {
     const state = getState() as RootState;
-    const { latitude, longitude } = state.coordinates.data as Coordinates;
+    const { latitude, longitude } = state.searchCity.data;
 
     const currentWeeklyTemp = await loadWeeklyTemp(latitude, longitude);
 
@@ -25,10 +24,11 @@ export const fetchData = createAsyncThunk(
   },
 );
 
-export const weeklyTempSlice = createCustomSlice(
-  "weeklyTemp",
+export const searchCityTempSlice = createCustomSlice(
+  "searchCityTemp",
   initialState,
-  fetchData,
+  fetchNewCityTemp,
 );
-export const { actions } = weeklyTempSlice;
-export default weeklyTempSlice.reducer;
+
+export const { actions } = searchCityTempSlice;
+export default searchCityTempSlice.reducer;

@@ -1,20 +1,33 @@
 import { combineSlices, configureStore } from "@reduxjs/toolkit";
 import { coordinatesSlice } from "./coordinatesSlice";
-import { locationNameSlice } from "./locationNameSlice";
-import { weeklyTempSlice } from "./weeklyTempSlice";
 import { hourlyTempSlice } from "./hourlyTempSlice";
-import { cityTempSlice } from "./cityTempSlice";
+import { locationNameSlice } from "./locationNameSlice";
+import { searchCitySlice } from "./searchCity";
+import { searchCityTempSlice } from "./searchCityTempSlice";
+import { weeklyTempSlice } from "./weeklyTempSlice";
 
-const rootReducer = combineSlices(
-  locationNameSlice,
-  coordinatesSlice,
-  weeklyTempSlice,
-  hourlyTempSlice,
-  cityTempSlice,
-);
+// const rootReducer = combineSlices(
+//   coordinatesSlice,
+//   weeklyTempSlice,
+//   hourlyTempSlice,
+//   locationNameSlice,
+//   searchCitySlice,
+//   searchCityTempSlice,
+// );
+
+// export const store = configureStore({
+//   reducer: rootReducer,
+// });
 
 export const store = configureStore({
-  reducer: rootReducer,
+  reducer: {
+    coordinates: coordinatesSlice.reducer,
+    weeklyTemp: weeklyTempSlice.reducer,
+    hourlyTemp: hourlyTempSlice.reducer,
+    locationName: locationNameSlice.reducer,
+    searchCity: searchCitySlice.reducer,
+    searchCityTemp: searchCityTempSlice.reducer,
+  },
 });
 
 store.subscribe(() => {

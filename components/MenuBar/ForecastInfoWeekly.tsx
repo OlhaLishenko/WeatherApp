@@ -1,34 +1,64 @@
 import { colors } from "@/constants/colors";
-// import { ForecastType } from "@/enums/ForecastType";
 import { DayInfo } from "@/types/DayInfo";
-// import { HourlyTemp } from "@/types/HourlyTemp";
 import { WeeklyTemp } from "@/types/WeeklyTemp";
-// import { findForecastImage } from "@/utils/findForecastImage";
 import React from "react";
-import { Image, StyleSheet, Text, View } from "react-native";
+import { ScrollView, StyleSheet, View } from "react-native";
+import ForecastAdditionInfo from "./ForecastAdditionInfo";
+import ForecastSlider from "./ForecastSlider";
+import ForecastWeeklyItem from "./ForecastWeeklyItem";
 
-type ForecastInfoType = {
-  dataItem: WeeklyTemp;
+type ForecastWeeklyDataListType = {
+  weeklyWeather: WeeklyTemp[];
   currentDay: DayInfo;
-  image: any;
+};
+
+export const ForecastWeeklyDataList = ({
+  weeklyWeather,
+  currentDay,
+}: ForecastWeeklyDataListType) => {
+  return (
+    <>
+      {weeklyWeather.map((dayWeather) => (
+        <ForecastWeeklyItem
+          dayWeather={dayWeather}
+          currentDay={currentDay}
+          key={dayWeather.id}
+        />
+      ))}
+    </>
+  );
+};
+
+type ForecastInfoWeeklyType = {
+  weeklyWeather: WeeklyTemp[];
+  currentDay: DayInfo;
 };
 
 export default function ForecastInfoWeekly({
-  dataItem,
+  weeklyWeather,
   currentDay,
-  image,
-}: ForecastInfoType) {
-  // const image = findForecastImage(dataItem);
-  const isToday = currentDay.dayNumber === dataItem.id + 1;
-
+}: ForecastInfoWeeklyType) {
   return (
-    <View style={[styles.container, isToday ? styles.containerActive : ""]}>
-      <Text style={styles.title}>{dataItem.weekDay}</Text>
-      <View>
-        <Image source={image} resizeMode='contain' style={styles.image} />
+    <ScrollView>
+      <View
+        style={{
+          flex: 1,
+          flexDirection: "column",
+          justifyContent: "flex-start",
+          gap: 20,
+        }}
+      >
+        <ForecastSlider direction={"horizontal"}>
+          <ForecastWeeklyDataList
+            weeklyWeather={weeklyWeather}
+            currentDay={currentDay}
+          />
+        </ForecastSlider>
+        <View style={{ flexDirection: "row" }}>
+          <ForecastAdditionInfo />
+        </View>
       </View>
-      <Text style={styles.textTemperature}>{dataItem.temp}°</Text>
-    </View>
+    </ScrollView>
   );
 }
 

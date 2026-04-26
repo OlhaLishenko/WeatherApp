@@ -1,10 +1,11 @@
 import { findCurrentGeo } from "@/api/findCurrentGeo";
-import { Coordinates, CoordinatesState } from "@/types/Coordinates";
+import { Coordinates } from "@/types/Coordinates";
+import { State } from "@/types/State";
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { LocationGeocodedLocation } from "expo-location";
 
-const initialState: CoordinatesState = {
-  coordinates: {
+const initialState: State<Coordinates> = {
+  data: {
     latitude: 0,
     longitude: 0,
   },
@@ -28,8 +29,8 @@ export const coordinatesSlice = createSlice({
     builder.addCase(
       loadCoordinates.fulfilled,
       (state, action: PayloadAction<LocationGeocodedLocation>) => {
-        state.coordinates.latitude = action.payload.latitude;
-        state.coordinates.longitude = action.payload.longitude;
+        state.data.latitude = action.payload.latitude;
+        state.data.longitude = action.payload.longitude;
         state.loader = false;
       },
     );

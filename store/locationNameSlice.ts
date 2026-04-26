@@ -8,9 +8,9 @@ type LocationName = {
 };
 
 const initialState: LocationName = {
-  city: "",
-  country: "",
-  error: "",
+  city: null,
+  country: null,
+  error: null,
 };
 
 export const LoadCurrentLocationName = createAsyncThunk(
@@ -18,7 +18,7 @@ export const LoadCurrentLocationName = createAsyncThunk(
   async (_, { getState }) => {
     const state = getState() as RootState;
     const coordinates = state.coordinates;
-    const { latitude, longitude } = coordinates.coordinates;
+    const { latitude, longitude } = coordinates.data;
 
     const data = await findCityByCoordinates(latitude, longitude);
     return data;
@@ -40,6 +40,7 @@ export const locationNameSlice = createSlice({
       (state, action: PayloadAction<LocationName>) => {
         state.city = action.payload.city;
         state.country = action.payload.country;
+        state.error = null;
       },
     );
     builder.addCase(LoadCurrentLocationName.rejected, (state) => {

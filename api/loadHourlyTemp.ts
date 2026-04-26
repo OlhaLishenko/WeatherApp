@@ -9,7 +9,5 @@ export async function loadHourlyTemp(
   const responses = await fetch(url);
   const data = await responses.json();
 
-  console.log("API response:", JSON.stringify(data, null, 2));
-
   return data;
 }

@@ -5,8 +5,6 @@ import { actions as actionsHourly } from "@/store/hourlyTempSlice";
 import { DayInfo } from "@/types/DayInfo";
 import { HourlyData, HourlyTemp } from "@/types/HourlyTemp";
 import { useAppDispatch, useAppSelector } from "@/types/reduxTypes";
-import { WeeklyTemp } from "@/types/WeeklyTemp";
-import { findForecastImage } from "@/utils/findForecastImage";
 import { useEffect, useRef, useState } from "react";
 import { Dimensions, StyleSheet, View } from "react-native";
 import { Gesture, GestureDetector } from "react-native-gesture-handler";
@@ -23,16 +21,15 @@ import ForecastSlider from "./ForecastSlider";
 const SCREEN_HEIGHT = Dimensions.get("window").height;
 const MIN_HEIGHT = SCREEN_HEIGHT * 0.4; // початкова висота
 const MAX_HEIGHT = SCREEN_HEIGHT * 0.85; // максимальна висота
-const menuDisplay = require("@/assets/images/menu-display.png");
 
 type MenuMainType = {
   currentDay: DayInfo;
 };
 
 export default function MenuMain({ currentDay }: MenuMainType) {
-  const { coordinates } = useAppSelector((state) => state.coordinates);
-  const dispatch = useAppDispatch();
+  const { data: coordinates } = useAppSelector((state) => state.coordinates);
   const { latitude, longitude } = coordinates;
+  const dispatch = useAppDispatch();
   const totalHoursPerDay = useRef<number>(24);
   const [activeForecastType, setActiveForecastType] = useState<ForecastType>(
     ForecastType.WEEKLY,
@@ -60,8 +57,6 @@ export default function MenuMain({ currentDay }: MenuMainType) {
           isDay: hourlyData.is_day.slice(startIndex, endIndex),
         };
 
-        console.log(formattedData);
-
         const hourlyIterationData: HourlyTemp[] = formattedData.time.map(
           (_: any, index: number) => ({
             id: index,
@@ -75,8 +70,6 @@ export default function MenuMain({ currentDay }: MenuMainType) {
             isDay: formattedData.isDay[index],
           }),
         );
-
-        console.log("hourlyData ", hourlyIterationData);
 
         dispatch(actionsHourly.setHourlyTempData(hourlyIterationData));
       } catch {
@@ -112,31 +105,9 @@ export default function MenuMain({ currentDay }: MenuMainType) {
     height: menuHeight.value,
   }));
 
-  const weeklyWeather = useAppSelector((state) => state.weeklyTemp);
-  const hourlyWeather = useAppSelector((state) => state.hourlyTemp);
-  const activeWeatherData =
-    activeForecastType === ForecastType.WEEKLY ? weeklyWeather : hourlyWeather;
+  const weeklyWeather = useAppSelector((state) => state.weeklyTemp.data);
+  const hourlyWeather = useAppSelector((state) => state.hourlyTemp.data);
   const isWeeklyWeatherData = activeForecastType === ForecastType.WEEKLY;
-
-  const renderForecastItem = (dataItem: WeeklyTemp | HourlyTemp) => {
-    if (activeForecastType === ForecastType.WEEKLY) {
-      return (
-        <ForecastInfoWeekly
-          dataItem={dataItem as WeeklyTemp}
-          currentDay={currentDay}
-          image={findForecastImage(dataItem)}
-          key={dataItem.id}
-        />
-      );
-    }
-    return (
-      <ForecastInfoHourly
-        dataItem={dataItem as HourlyTemp}
-        image={findForecastImage(dataItem)}
-        key={dataItem.id}
-      />
-    );
-  };
 
   return (
     <>
@@ -155,11 +126,21 @@ export default function MenuMain({ currentDay }: MenuMainType) {
         />
 
         <View style={{ flex: 1 }}>
-          <ForecastSlider
-            direction={isWeeklyWeatherData ? "horizontal" : "vertical"}
-          >
-            {activeWeatherData.data.map(renderForecastItem)}
-          </ForecastSlider>
+          {isWeeklyWeatherData ? (
+            <ForecastInfoWeekly
+              weeklyWeather={weeklyWeather}
+              currentDay={currentDay}
+            />
+          ) : (
+            <ForecastSlider direction='vertical'>
+              {hourlyWeather.map((hourlyWeather) => (
+                <ForecastInfoHourly
+                  hourlyWeather={hourlyWeather}
+                  key={hourlyWeather.id}
+                />
+              ))}
+            </ForecastSlider>
+          )}
         </View>
       </Animated.View>
       <View style={styles.bottomBarContainer}>

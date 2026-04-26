@@ -1,14 +1,11 @@
 import { HourlyTemp } from "@/types/HourlyTemp";
+import { State } from "@/types/State";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
-export type HourlyTempSliceType = {
-  data: HourlyTemp[];
-  error: string;
-};
-
-const initialState: HourlyTempSliceType = {
+const initialState: State<HourlyTemp[]> = {
   data: [],
-  error: "",
+  loader: false,
+  error: null,
 };
 
 export const hourlyTempSlice = createSlice({
@@ -17,7 +14,7 @@ export const hourlyTempSlice = createSlice({
   reducers: {
     setHourlyTempData(state, action: PayloadAction<HourlyTemp[]>) {
       state.data = action.payload;
-      state.error = "";
+      state.error = null;
     },
 
     setHourlyTempError(state) {

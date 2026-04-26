@@ -1,29 +1,16 @@
 import ForecastList from "@/components/SearchScreen/ForecastList";
 import InputSearch from "@/components/SearchScreen/InputSearch";
 import { colors } from "@/constants/colors";
-import { Coordinates } from "@/types/Coordinates";
-import { useAppDispatch, useAppSelector } from "@/types/reduxTypes";
-import { TempState } from "@/types/TempState";
-import { fetchData } from "@/utils/createCustomSlice";
+import { useAppSelector } from "@/types/reduxTypes";
 import { LinearGradient } from "expo-linear-gradient";
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { Image, ScrollView, StyleSheet, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 const arrowIcon = require("@/assets/images/icon-arrow.png");
 
 export default function Forecast() {
-  const weeklyTemp = useAppSelector((state) => state.weeklyTemp);
-  const newCityTemp = useAppSelector((state) => state.newCityTemp);
-  const dispatch = useAppDispatch();
-  const [searchCity, setSearchSity] = useState<string>("");
-  const [temporaryCoords, setTemporaryCoords] = useState();
-  const [temporaryWeather, setTemporaryWeather] =
-    useState<TempState>(weeklyTemp);
-
-  // useEffect(() => {
-  //   dispatch(fetchData());
-  // }, []);
+  const searchCityTemp = useAppSelector((state) => state.searchCityTemp.data);
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
@@ -34,14 +21,21 @@ export default function Forecast() {
         end={[3, 1]}
         locations={[0.1, 0.7]}
       >
-        <ScrollView style={{ flex: 1, paddingInline: 16 }}>
+        <ScrollView
+          contentContainerStyle={{
+            paddingHorizontal: 16,
+            paddingVertical: 16,
+            flexDirection: "column",
+            gap: 20,
+          }}
+        >
           <View style={styles.navContainer}>
             <Image source={arrowIcon} style={{ width: 24, height: 24 }} />
             <Text style={styles.navText}>Weather</Text>
           </View>
-          <InputSearch setTemporaryCoords={setTemporaryCoords} />
+          <InputSearch />
           <View style={{ flex: 1, flexDirection: "column", gap: 20 }}>
-            {newCityTemp.data.map((day) => (
+            {searchCityTemp.map((day) => (
               <ForecastList tempData={day} key={day.weekDay} />
             ))}
           </View>
@@ -53,10 +47,9 @@ export default function Forecast() {
 
 const styles = StyleSheet.create({
   navContainer: {
-    flexDirection: "row",
     width: "100%",
+    flexDirection: "row",
     alignItems: "center",
-    paddingBlock: 9,
   },
   navText: {
     fontSize: 28,

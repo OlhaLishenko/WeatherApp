@@ -12,6 +12,12 @@ export function normolizeTempData(initTempData: any) {
       rainSum: tempData.rain_sum[index],
       cloudCover: tempData.cloud_cover_mean[index],
       windSpeed: tempData.wind_speed_10m_max[index],
+      sunrise: tempData.sunrise[index],
+      uvIndex: tempData.uv_index_max[index],
+      daylightDuration: tempData.daylight_duration[index],
+      surfacePressure: tempData.surface_pressure_mean[index],
+      humidity: tempData.relative_humidity_2m_mean[index],
+      visibility: tempData.visibility_mean[index],
     }),
   );
 

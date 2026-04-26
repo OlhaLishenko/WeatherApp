@@ -1,4 +1,7 @@
+import { actions as searchCityActions } from "@/store/searchCity";
+import { actions as searchCityTempActions } from "@/store/searchCityTempSlice";
 import { NavigationType } from "@/types/NavigationType";
+import { useAppDispatch, useAppSelector } from "@/types/reduxTypes";
 import { useNavigation } from "@react-navigation/native";
 import React from "react";
 import {
@@ -15,6 +18,24 @@ const iconMap = require("@/assets/images/Map.png");
 
 export default function BottomBarControls() {
   const navigation = useNavigation<NavigationType>();
+  const weeklyWeather = useAppSelector((state) => state.weeklyTemp.data);
+  const locationName = useAppSelector((state) => state.locationName);
+  const coordinates = useAppSelector((state) => state.coordinates.data);
+  const dispatch = useAppDispatch();
+
+  const handleNavigate = () => {
+    dispatch(searchCityTempActions.setData(weeklyWeather));
+    dispatch(
+      searchCityActions.setData({
+        latitude: coordinates.latitude,
+        longitude: coordinates.longitude,
+        country: locationName.country,
+        city: locationName.city,
+      }),
+    );
+    navigation.navigate("Forecast");
+  };
+
   return (
     <ImageBackground
       source={menuBg}
@@ -34,12 +55,7 @@ export default function BottomBarControls() {
       resizeMode='cover'
     >
       <View style={styles.bottomBarContent}>
-        <TouchableOpacity
-          style={styles.icon}
-          onPress={() => {
-            navigation.navigate("Forecast");
-          }}
-        >
+        <TouchableOpacity style={styles.icon} onPress={handleNavigate}>
           <Image
             source={iconMenu}
             resizeMode='contain'

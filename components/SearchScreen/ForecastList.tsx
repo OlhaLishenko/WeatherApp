@@ -1,5 +1,6 @@
 import { colors } from "@/constants/colors";
 import { Fonts } from "@/constants/theme";
+import { customStyles } from "@/styles/customStyles";
 import { useAppSelector } from "@/types/reduxTypes";
 import { WeeklyTemp } from "@/types/WeeklyTemp";
 import { findForecastImage } from "@/utils/findForecastImage";
@@ -7,7 +8,7 @@ import { LinearGradient } from "expo-linear-gradient";
 import React from "react";
 import { Image, StyleSheet, Text, View } from "react-native";
 
-const forecastBgBlock = require("@/assets/images/forecast-block.png");
+const forecastBgBlock = require("@/assets/images/ForecastBlock_shadow.png");
 const rainIcon = require("@/assets/images/forecast/cloud-rain-solid.png");
 const windIcon = require("@/assets/images/forecast/wind-solid.png");
 const cloudIcon = require("@/assets/images/forecast/cloud-regular.png");
@@ -18,7 +19,7 @@ type ForecastType = {
 
 export default function ForecastList({ tempData }: ForecastType) {
   const image = findForecastImage(tempData);
-  const locationName = useAppSelector((state) => state.locationName);
+  const searchCity = useAppSelector((state) => state.searchCity.data);
 
   const indicatorsData = [
     {
@@ -56,10 +57,13 @@ export default function ForecastList({ tempData }: ForecastType) {
       <Image source={forecastBgBlock} style={styles.bg} resizeMode='contain' />
       <View style={[StyleSheet.absoluteFill]}>
         <View style={styles.textContainer}>
-          <Text style={styles.textBig}>{tempData.temp}°</Text>
+          <View style={[customStyles.flexRow, { marginRight: 180 }]}>
+            <Text style={styles.textBig}>{tempData.temp}°</Text>
+            <Text style={styles.textSmall}>{tempData.weekDay}.</Text>
+          </View>
 
           <Text style={styles.textSmall}>
-            {locationName.city}, {locationName.country}
+            {searchCity.city}, {searchCity.country}
           </Text>
 
           <LinearGradient
@@ -112,6 +116,7 @@ const styles = StyleSheet.create({
     fontStyle: "normal",
     color: colors.mainText,
     fontFamily: Fonts.family.regular,
+    lineHeight: 51,
   },
 
   textSmall: {
@@ -126,9 +131,8 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: "column",
     gap: 10,
-    paddingLeft: 25,
-    paddingTop: 30,
-    paddingBottom: 20,
+    paddingLeft: 30,
+    paddingBottom: 40,
     justifyContent: "flex-end",
   },
 

@@ -1,25 +1,25 @@
 import { colors } from "@/constants/colors";
 import { Fonts } from "@/constants/theme";
 import { HourlyTemp } from "@/types/HourlyTemp";
+import { findForecastImage } from "@/utils/findForecastImage";
 import { LinearGradient } from "expo-linear-gradient";
 import React from "react";
 import { Image, StyleSheet, Text, View } from "react-native";
 
 type ForecastInfoHourlyType = {
-  dataItem: HourlyTemp;
-  image: any;
+  hourlyWeather: HourlyTemp;
 };
 
 export default function ForecastInfoHourly({
-  dataItem,
-  image,
+  hourlyWeather,
 }: ForecastInfoHourlyType) {
+  const image = findForecastImage(hourlyWeather);
   return (
     <>
       <LinearGradient
         colors={[
           "transparent",
-          dataItem.id % 2 === 1
+          hourlyWeather.id % 2 === 1
             ? colors.overlayBlueDark
             : colors.overlayBlueLight,
           "transparent",
@@ -29,20 +29,20 @@ export default function ForecastInfoHourly({
       >
         <View style={styles.container}>
           <Text style={[styles.text, styles.tempItem, styles.tempItemBase]}>
-            {dataItem.time.slice(-5)}
+            {hourlyWeather.time.slice(-5)}
           </Text>
           <View style={styles.tempItemBase}>
-            <Text style={styles.text}>{dataItem.temp}°</Text>
+            <Text style={styles.text}>{hourlyWeather.temp}°</Text>
             <Image source={image} resizeMode='contain' style={styles.image} />
           </View>
           <Text style={[styles.text, styles.tempItem, styles.tempItemBase]}>
-            {dataItem.rainSum} mm
+            {hourlyWeather.rainSum} mm
           </Text>
           <Text style={[styles.text, styles.tempItem, styles.tempItemBase]}>
-            {dataItem.windSpeed} km/h
+            {hourlyWeather.windSpeed} km/h
           </Text>
           <Text style={[styles.text, styles.tempItem, styles.tempItemBase]}>
-            {dataItem.uvIndex}
+            {hourlyWeather.uvIndex}
           </Text>
         </View>
       </LinearGradient>
@@ -61,7 +61,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     alignContent: "center",
     justifyContent: "center",
-    // gap: 8,
     width: "100%",
     paddingVertical: 5,
     flex: 1,
