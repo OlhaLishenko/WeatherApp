@@ -5,6 +5,7 @@ import { LoadCurrentLocationName } from "@/store/locationNameSlice";
 import { fetchData } from "@/store/weeklyTempSlice";
 import { useAppDispatch, useAppSelector } from "@/types/reduxTypes";
 import { getCurrentDay } from "@/utils/getCurrentDay";
+import { LinearGradient } from "expo-linear-gradient";
 import { useEffect } from "react";
 import { Image, ImageBackground, StyleSheet, Text, View } from "react-native";
 
@@ -36,28 +37,35 @@ export default function HomePage() {
   return (
     <View style={{ flex: 1 }}>
       <ImageBackground source={imageBg} resizeMode='cover' style={styles.bg}>
-        <View style={styles.mainScreenContent}>
-          <View style={styles.textContainer}>
-            <Text style={styles.textMainTown}>
-              {locationName.city}, {locationName.country}
-            </Text>
-            <Text style={styles.textMainTown}>{currentTemp}°</Text>
-            <Text style={styles.textMainTown}>{currentDay.dayName}</Text>
+        <LinearGradient
+          colors={[colors.transparent, colors.darkBlueElements]}
+          style={{ flex: 1 }}
+          start={[0.9, 0]}
+          end={[1, 1]}
+        >
+          <View style={styles.mainScreenContent}>
+            <View style={styles.textContainer}>
+              <Text style={styles.textMainTown}>
+                {locationName.city}, {locationName.country}
+              </Text>
+              <Text style={styles.textMainTown}>{currentTemp}°</Text>
+              <Text style={styles.textMainTown}>{currentDay.dayName}</Text>
+            </View>
+            <View
+              style={{
+                flex: 1,
+                position: "relative",
+              }}
+            >
+              <Image
+                source={imageHome}
+                style={styles.imageHome}
+                resizeMode='contain'
+              />
+            </View>
           </View>
-          <View
-            style={{
-              flex: 1,
-              position: "relative",
-            }}
-          >
-            <Image
-              source={imageHome}
-              style={styles.imageHome}
-              resizeMode='contain'
-            />
-          </View>
-        </View>
-        <MenuMain currentDay={currentDay} />
+          <MenuMain currentDay={currentDay} />
+        </LinearGradient>
       </ImageBackground>
     </View>
   );
