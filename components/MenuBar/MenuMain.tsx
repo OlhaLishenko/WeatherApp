@@ -5,6 +5,7 @@ import { actions as actionsHourly } from "@/store/hourlyTempSlice";
 import { DayInfo } from "@/types/DayInfo";
 import { HourlyData, HourlyTemp } from "@/types/HourlyTemp";
 import { useAppDispatch, useAppSelector } from "@/types/reduxTypes";
+import { LinearGradient } from "expo-linear-gradient";
 import { useEffect, useRef, useState } from "react";
 import { Dimensions, StyleSheet, View } from "react-native";
 import { Gesture, GestureDetector } from "react-native-gesture-handler";
@@ -112,36 +113,43 @@ export default function MenuMain({ currentDay }: MenuMainType) {
   return (
     <>
       <Animated.View style={[styles.menuDisplay, animatedStyle]}>
-        <GestureDetector gesture={dragGesture}>
-          <View style={styles.buttonDrag}>
-            <View style={styles.dragLine} />
+        <LinearGradient
+          colors={[colors.secondaryBgBlue, colors.mainBgBlue]}
+          style={{ flex: 1 }}
+          start={[0.9, 0]}
+          end={[-1, -1]}
+        >
+          <GestureDetector gesture={dragGesture}>
+            <View style={styles.buttonDrag}>
+              <View style={styles.dragLine} />
+            </View>
+          </GestureDetector>
+
+          {/* <View style={styles.menuBackground}></View> */}
+
+          <ForecastOptions
+            handleSetActiveForecastType={setActiveForecastType}
+            activeForecastType={activeForecastType}
+          />
+
+          <View style={{ flex: 1 }}>
+            {isWeeklyWeatherData ? (
+              <ForecastInfoWeekly
+                weeklyWeather={weeklyWeather}
+                currentDay={currentDay}
+              />
+            ) : (
+              <ForecastSlider direction='vertical'>
+                {hourlyWeather.map((hourlyWeather) => (
+                  <ForecastInfoHourly
+                    hourlyWeather={hourlyWeather}
+                    key={hourlyWeather.id}
+                  />
+                ))}
+              </ForecastSlider>
+            )}
           </View>
-        </GestureDetector>
-
-        <View style={styles.menuBackground}></View>
-
-        <ForecastOptions
-          handleSetActiveForecastType={setActiveForecastType}
-          activeForecastType={activeForecastType}
-        />
-
-        <View style={{ flex: 1 }}>
-          {isWeeklyWeatherData ? (
-            <ForecastInfoWeekly
-              weeklyWeather={weeklyWeather}
-              currentDay={currentDay}
-            />
-          ) : (
-            <ForecastSlider direction='vertical'>
-              {hourlyWeather.map((hourlyWeather) => (
-                <ForecastInfoHourly
-                  hourlyWeather={hourlyWeather}
-                  key={hourlyWeather.id}
-                />
-              ))}
-            </ForecastSlider>
-          )}
-        </View>
+        </LinearGradient>
       </Animated.View>
       <View style={styles.bottomBarContainer}>
         <BottomBarControls />
@@ -193,6 +201,7 @@ const styles = StyleSheet.create({
 
   menuBackground: {
     ...StyleSheet.absoluteFillObject,
+    // backgroundColor: "#ffffff",
     backgroundColor: colors.lightBlueElements,
     borderTopLeftRadius: 30,
     borderTopRightRadius: 30,

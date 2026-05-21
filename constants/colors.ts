@@ -7,16 +7,18 @@ export const colors = {
   mainText: "hsl(0, 0%, 100%)",
   orange: "hsl(28, 100%, 52%)",
   lightBlueElements: "hsl(251, 52%, 34%)",
-  darkBlueElements: "hsl(248, 70%, 36%)",
+  darkBlueElements: "hsl(263, 88%, 39%)",
   overlayBlueDark: "hsla(243, 96%, 9%, 0.22)",
   overlayBlueLight: "hsla(0, 0%, 100%, 0.14)",
   textGray: "#EBEBF599",
   darkGray: "#0000004D",
-  mainBgBlue: "#48319D",
+  mainBgBlue: "#c751d2",
+  transparent: "#ffffff00",
 
   blueDark: "#1C1B33",
-  secondaryBgBlue: "#2E335A",
-  textPlaceholder: "#EBEBF599",
+  secondaryBgBlue: "#3C2C77",
 
   solid: "#E0D9FF",
+  textPlaceholder: "#EBEBF599",
+  buttonColor: "#2196F3",
 };

@@ -16,5 +16,6 @@ export async function findCityByCoordinates(
   return {
     city: result.city,
     country: result.country,
+    timezone: result.timezone,
   };
 }

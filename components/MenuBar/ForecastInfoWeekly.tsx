@@ -1,8 +1,8 @@
 import { colors } from "@/constants/colors";
 import { DayInfo } from "@/types/DayInfo";
 import { WeeklyTemp } from "@/types/WeeklyTemp";
-import React from "react";
-import { ScrollView, StyleSheet, View } from "react-native";
+import React, { lazy } from "react";
+import { FlatList, ScrollView, StyleSheet, View } from "react-native";
 import ForecastAdditionInfo from "./ForecastAdditionInfo";
 import ForecastSlider from "./ForecastSlider";
 import ForecastWeeklyItem from "./ForecastWeeklyItem";
@@ -11,6 +11,26 @@ type ForecastWeeklyDataListType = {
   weeklyWeather: WeeklyTemp[];
   currentDay: DayInfo;
 };
+
+type Indicators = {
+  title: string;
+  component: React.ComponentType<any>;
+}[];
+
+const additionIndicators: Indicators = [
+  {
+    title: "Sunrise",
+    component: lazy(() => import("./../Indicators/Sunrise")),
+  },
+  {
+    title: "Sunrise",
+    component: lazy(() => import("./../Indicators/Sunrise")),
+  },
+  {
+    title: "Sunrise",
+    component: lazy(() => import("./../Indicators/Sunrise")),
+  },
+];
 
 export const ForecastWeeklyDataList = ({
   weeklyWeather,
@@ -55,7 +75,11 @@ export default function ForecastInfoWeekly({
           />
         </ForecastSlider>
         <View style={{ flexDirection: "row" }}>
-          <ForecastAdditionInfo />
+          <FlatList
+            data={additionIndicators}
+            renderItem={({ item }) => <ForecastAdditionInfo context={item} />}
+            numColumns={2}
+          />
         </View>
       </View>
     </ScrollView>

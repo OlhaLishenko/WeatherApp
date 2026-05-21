@@ -1,15 +1,15 @@
 import { colors } from "@/constants/colors";
-import { LinearGradient } from "expo-linear-gradient";
 import React from "react";
-import { Image, StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, View } from "react-native";
+import Sunrise from "../Indicators/Sunrise";
 const sunrise = require("@/assets/images/sunrise.png");
 
-export default function ForecastAdditionInfo() {
+export default function ForecastAdditionInfo({ context }) {
   return (
     <View style={styles.container}>
       <Text>ForecastAdditionInfo</Text>
 
-      <View style={{ width: "90%", height: 6 }}>
+      {/* <View style={{ width: "90%", height: 6 }}>
         <LinearGradient
           colors={["green", "yellow", "orange", "red", "purple"]}
           start={{ x: 0, y: 1 }}
@@ -24,13 +24,11 @@ export default function ForecastAdditionInfo() {
               borderRadius: "50%",
               borderColor: colors.blueDark,
               borderWidth: 1,
-              // left: "25%",
             }}
           ></View>
         </LinearGradient>
-      </View>
-
-      <Image source={sunrise} style={{ width: "100%" }} resizeMode='contain' />
+      </View> */}
+      <Sunrise />
     </View>
   );
 }
@@ -43,5 +41,6 @@ const styles = StyleSheet.create({
     borderColor: colors.solid,
     borderRadius: 16,
     borderWidth: 1,
+    overflow: "hidden",
   },
 });

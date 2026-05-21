@@ -35,6 +35,13 @@ export default function BottomBarControls() {
     );
     navigation.navigate("Forecast");
   };
+  const handleNavigateToMap = () => {
+    navigation.navigate("MapLocation");
+  };
+
+  const handleCreateFavorite = () => {
+    navigation.navigate("FavoriteCities");
+  };
 
   return (
     <ImageBackground
@@ -65,7 +72,7 @@ export default function BottomBarControls() {
 
         <TouchableOpacity style={{ flex: 1 }}></TouchableOpacity>
 
-        <TouchableOpacity style={styles.icon}>
+        <TouchableOpacity style={styles.icon} onPress={handleNavigateToMap}>
           <Image
             source={iconMap}
             resizeMode='contain'
@@ -74,7 +81,10 @@ export default function BottomBarControls() {
         </TouchableOpacity>
       </View>
 
-      <TouchableOpacity style={{ flex: 1, position: "absolute" }}>
+      <TouchableOpacity
+        style={{ flex: 1, position: "absolute" }}
+        onPress={handleCreateFavorite}
+      >
         <Image source={menuAdd} resizeMode='contain' />
       </TouchableOpacity>
     </ImageBackground>
