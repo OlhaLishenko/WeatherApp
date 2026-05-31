@@ -20,7 +20,7 @@ export const fetchNewCityTemp = createAsyncThunk(
 
     const currentWeeklyTemp = await loadWeeklyTemp(latitude, longitude);
 
-    return normolizeTempData(currentWeeklyTemp);
+    return normolizeTempData(currentWeeklyTemp, "weekly") as WeeklyTemp[];
   },
 );
 

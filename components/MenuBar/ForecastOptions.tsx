@@ -1,4 +1,5 @@
 import { colors } from "@/constants/colors";
+import { Typography } from "@/constants/fontsConfiguration";
 import { ForecastType } from "@/enums/ForecastType";
 import { LinearGradient } from "expo-linear-gradient";
 import React from "react";
@@ -61,13 +62,7 @@ const styles = StyleSheet.create({
   },
 
   text: {
-    fontSize: 15,
-    fontWeight: "600",
-    fontStyle: "normal",
-    lineHeight: 20,
-    letterSpacing: -0.5,
-    textAlign: "right",
-    color: colors.textGray,
+    ...Typography.smallGrey,
   },
 
   underline: {

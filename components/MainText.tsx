@@ -1,21 +1,19 @@
-import { colors } from "@/constants/colors";
-import { Fonts } from "@/constants/theme";
+import { Typography } from "@/constants/fontsConfiguration";
 import { Text } from "@react-navigation/elements";
+import { StyleSheet } from "react-native";
 
 export default function MainText() {
   return (
     <>
-      <Text
-        style={{
-          fontFamily: Fonts.family.secondary,
-          color: colors.mainText,
-          fontSize: Fonts.size.h4,
-          textAlign: "center",
-          alignContent: "center",
-        }}
-      >
-        How’s the sky looking today?
-      </Text>
+      <Text style={styles.text}>How’s the sky looking today?</Text>
     </>
   );
 }
+
+const styles = StyleSheet.create({
+  text: {
+    ...Typography.big,
+    textAlign: "center",
+    alignContent: "center",
+  },
+});

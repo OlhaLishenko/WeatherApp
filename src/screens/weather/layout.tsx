@@ -1,5 +1,6 @@
 import { colors } from "@/constants/colors";
 import { customStyles } from "@/styles/customStyles";
+import { getNavTitle } from "@/utils/getNavTitle";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { LinearGradient } from "expo-linear-gradient";
 import React from "react";
@@ -21,7 +22,7 @@ export default function WeatherLayout({
 }) {
   const route = useRoute();
   const navigate = useNavigation();
-  const navText = route.name === "Forecast" ? "Weather" : "Map";
+  const navTitle = getNavTitle(route.name);
 
   return (
     <SafeAreaView style={{ flex: 1 }} onStartShouldSetResponder={() => false}>
@@ -43,7 +44,7 @@ export default function WeatherLayout({
           <TouchableOpacity onPress={() => navigate.goBack()}>
             <View style={customStyles.navContainer}>
               <Image source={arrowIcon} style={{ width: 24, height: 24 }} />
-              <Text style={customStyles.navText}>{navText}</Text>
+              <Text style={customStyles.navText}>{navTitle}</Text>
             </View>
           </TouchableOpacity>
           {children}

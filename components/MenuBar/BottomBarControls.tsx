@@ -46,19 +46,7 @@ export default function BottomBarControls() {
   return (
     <ImageBackground
       source={menuBg}
-      style={[
-        StyleSheet.absoluteFill,
-        {
-          position: "relative",
-          height: 100,
-          bottom: 0,
-          right: 0,
-          left: 0,
-          width: "100%",
-          justifyContent: "center",
-          alignItems: "center",
-        },
-      ]}
+      style={styles.iconContainer}
       resizeMode='cover'
     >
       <View style={styles.bottomBarContent}>
@@ -92,6 +80,16 @@ export default function BottomBarControls() {
 }
 
 const styles = StyleSheet.create({
+  iconContainer: {
+    position: "relative",
+    height: 100,
+    bottom: 0,
+    right: 0,
+    left: 0,
+    width: "100%",
+    justifyContent: "center",
+    alignItems: "center",
+  },
   icon: {
     width: 50,
     height: 50,

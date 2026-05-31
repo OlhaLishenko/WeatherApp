@@ -36,6 +36,7 @@ export default function InputSearch() {
 
 const styles = StyleSheet.create({
   inputWrapper: {
+    flex: 1,
     flexDirection: "row",
     alignItems: "center",
 

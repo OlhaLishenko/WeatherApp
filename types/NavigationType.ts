@@ -1,4 +1,4 @@
-// import { NativeStackNavigationProp } from "@react-navigation/native-stack";
-// import { RootListType } from "./RootListType";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import { RootListType } from "./RootListType";
 
-// export type NavigationType = NativeStackNavigationProp<RootListType>;
+export type NavigationType = NativeStackNavigationProp<RootListType>;

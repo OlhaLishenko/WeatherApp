@@ -1,5 +1,5 @@
 import { colors } from "@/constants/colors";
-import { Fonts } from "@/constants/theme";
+import { Typography } from "@/constants/fontsConfiguration";
 import { HourlyTemp } from "@/types/HourlyTemp";
 import { findForecastImage } from "@/utils/findForecastImage";
 import { LinearGradient } from "expo-linear-gradient";
@@ -33,7 +33,11 @@ export default function ForecastInfoHourly({
           </Text>
           <View style={styles.tempItemBase}>
             <Text style={styles.text}>{hourlyWeather.temp}°</Text>
-            <Image source={image} resizeMode='contain' style={styles.image} />
+            <Image
+              source={image.imageBig}
+              resizeMode='contain'
+              style={styles.image}
+            />
           </View>
           <Text style={[styles.text, styles.tempItem, styles.tempItemBase]}>
             {hourlyWeather.rainSum} mm
@@ -69,11 +73,7 @@ const styles = StyleSheet.create({
   },
 
   text: {
-    fontSize: 15,
-    fontWeight: "600",
-    lineHeight: 21,
-    color: colors.mainText,
-    fontFamily: Fonts.family.secondary,
+    ...Typography.medium,
   },
 
   tempItemBase: {

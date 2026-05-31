@@ -1,9 +1,9 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import InitScreen from "../screens/InitScreen";
+import FavoriteCities from "../screens/weather/favoriteCities/FavoriteCities";
+import Forecast from "../screens/weather/Forecast";
+import MapLocation from "../screens/weather/MapLocation";
 import HomePage from "../screens/HomePage";
-import Forecast from "../screens/(weather)/Forecast";
-import MapLocation from "../screens/(weather)/MapLocation";
-import FavoriteCities from "../screens/(weather)/FavoriteCities";
+import InitScreen from "../screens/InitScreen";
 const Stack = createNativeStackNavigator();
 
 export default function RootNavigator() {

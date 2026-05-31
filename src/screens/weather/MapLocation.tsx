@@ -1,6 +1,6 @@
 import { findCityByCoordinates } from "@/api/findCityByCoordinates";
 import { colors } from "@/constants/colors";
-import { Fonts } from "@/constants/theme";
+import { Fonts } from "@/constants/fontsConfiguration";
 import { actions as searchCityAction } from "@/store/searchCity";
 import { fetchNewCityTemp } from "@/store/searchCityTempSlice";
 import { customStyles } from "@/styles/customStyles";

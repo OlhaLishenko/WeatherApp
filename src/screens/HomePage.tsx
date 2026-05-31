@@ -1,12 +1,17 @@
 //#region imports
+import { loadCurrentTemp } from "@/api/loadCurrentTemp";
 import MenuMain from "@/components/MenuBar/MenuMain";
 import { colors } from "@/constants/colors";
+import { Typography } from "@/constants/fontsConfiguration";
+import { tempIndicator } from "@/constants/variables";
 import { LoadCurrentLocationName } from "@/store/locationNameSlice";
-import { fetchData } from "@/store/weeklyTempSlice";
+import { fetchWeeklyData } from "@/store/weeklyTempSlice";
+import { DayInfo } from "@/types/DayInfo";
+import { CurrentWeather } from "@/types/FavoriteCity";
 import { useAppDispatch, useAppSelector } from "@/types/reduxTypes";
 import { getCurrentDay } from "@/utils/getCurrentDay";
 import { LinearGradient } from "expo-linear-gradient";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Image, ImageBackground, StyleSheet, Text, View } from "react-native";
 
 const imageBg = require("@/assets/images/bg-main.png");
@@ -19,20 +24,51 @@ export default function HomePage() {
   const weeklyTemp = useAppSelector((state) => state.weeklyTemp);
   const dispatch = useAppDispatch();
 
+  const [currentTemp, setCurrentTemp] = useState<CurrentWeather | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState("");
+
   const { latitude, longitude } = coordinates.data;
 
   useEffect(() => {
     if (!latitude || !longitude) return;
     const fetchInitData = async () => {
-      await dispatch(LoadCurrentLocationName());
-      await dispatch(fetchData());
+      try {
+        await dispatch(LoadCurrentLocationName());
+        await dispatch(fetchWeeklyData());
+        const currentWeather = await loadCurrentTemp(
+          coordinates.data.latitude,
+          coordinates.data.longitude,
+        );
+
+        setCurrentTemp({
+          temp: currentWeather.temperature,
+          rainSum: currentWeather.rain,
+          cloudCover: currentWeather.cloudCover,
+          windSpeed: currentWeather.windSpeed,
+        });
+      } catch {
+        setError("Can not fetch forecast");
+      } finally {
+        setIsLoading(false);
+      }
     };
 
     fetchInitData();
-  }, [dispatch, latitude, longitude]);
+  }, [
+    coordinates.data.latitude,
+    coordinates.data.longitude,
+    dispatch,
+    latitude,
+    longitude,
+  ]);
 
-  const currentDay = getCurrentDay();
-  const currentTemp = weeklyTemp.data[currentDay.dayNumber]?.temp;
+  const currentDay: DayInfo = getCurrentDay();
+
+  // const currentTemp = weeklyTemp.data[currentDay.dayNumber]?.temp;
+
+  console.log(currentTemp);
+  console.log("location " + locationName.city);
 
   return (
     <View style={{ flex: 1 }}>
@@ -45,11 +81,21 @@ export default function HomePage() {
         >
           <View style={styles.mainScreenContent}>
             <View style={styles.textContainer}>
-              <Text style={styles.textMainTown}>
+              <Text style={styles.title}>
                 {locationName.city}, {locationName.country}
               </Text>
-              <Text style={styles.textMainTown}>{currentTemp}°</Text>
-              <Text style={styles.textMainTown}>{currentDay.dayName}</Text>
+              {isLoading ? (
+                <Text>Loading</Text>
+              ) : error && currentTemp === null ? (
+                <Text>{error}</Text>
+              ) : (
+                <Text style={styles.title}>
+                  {currentTemp?.temp}
+                  {tempIndicator}
+                </Text>
+              )}
+
+              <Text style={styles.title}>{currentDay.dayName}</Text>
             </View>
             <View
               style={{
@@ -57,11 +103,7 @@ export default function HomePage() {
                 position: "relative",
               }}
             >
-              <Image
-                source={imageHome}
-                style={styles.imageHome}
-                resizeMode='contain'
-              />
+              <Image source={imageHome} resizeMode='contain' />
             </View>
           </View>
           <MenuMain currentDay={currentDay} />
@@ -93,42 +135,13 @@ const styles = StyleSheet.create({
     gap: 12,
   },
 
-  textMainTown: {
-    fontSize: 34,
-    fontWeight: "400",
-    fontStyle: "normal",
-    lineHeight: 41,
-    letterSpacing: 0.37400001287460327,
+  title: {
+    ...Typography.big,
     textAlign: "center",
-    color: colors.mainText,
-  },
-
-  textMainDescript: {
-    fontSize: 20,
-    fontWeight: "600",
-    fontStyle: "normal",
-    lineHeight: 24,
-    letterSpacing: 0.3799999952316284,
-    textAlign: "center",
-    color: colors.mainText,
-  },
-
-  textMainTownTemp: {
-    fontSize: 96,
-    fontWeight: "100",
-    fontStyle: "normal",
-    lineHeight: 70,
-    letterSpacing: 0.37400001287460327,
-    textAlign: "center",
-    color: colors.mainText,
   },
 
   bg: {
     flex: 1,
     justifyContent: "flex-end",
   },
-
-  imageHome: {},
-
-  menuBg: {},
 });

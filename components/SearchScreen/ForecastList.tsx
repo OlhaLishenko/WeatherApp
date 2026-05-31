@@ -1,17 +1,15 @@
 import { colors } from "@/constants/colors";
-import { Fonts } from "@/constants/theme";
+import { Fonts } from "@/constants/fontsConfiguration";
 import { customStyles } from "@/styles/customStyles";
 import { useAppSelector } from "@/types/reduxTypes";
 import { WeeklyTemp } from "@/types/WeeklyTemp";
 import { findForecastImage } from "@/utils/findForecastImage";
+import { getWeatherIcons } from "@/utils/getWeatherIcons";
 import { LinearGradient } from "expo-linear-gradient";
 import React from "react";
 import { Image, StyleSheet, Text, View } from "react-native";
 
 const forecastBgBlock = require("@/assets/images/ForecastBlock_shadow.png");
-const rainIcon = require("@/assets/images/forecast/cloud-rain-solid.png");
-const windIcon = require("@/assets/images/forecast/wind-solid.png");
-const cloudIcon = require("@/assets/images/forecast/cloud-regular.png");
 
 type ForecastType = {
   tempData: WeeklyTemp;
@@ -21,29 +19,11 @@ export default function ForecastList({ tempData }: ForecastType) {
   const image = findForecastImage(tempData);
   const searchCity = useAppSelector((state) => state.searchCity.data);
 
-  const indicatorsData = [
-    {
-      id: "1",
-      name: "rain",
-      unit: "mm",
-      icon: rainIcon,
-      value: tempData.rainSum,
-    },
-    {
-      id: "2",
-      name: "wind",
-      unit: "km/h",
-      icon: windIcon,
-      value: tempData.windSpeed,
-    },
-    {
-      id: "3",
-      name: "cloud",
-      unit: "%",
-      icon: cloudIcon,
-      value: tempData.cloudCover,
-    },
-  ];
+  const indicators = getWeatherIcons({
+    rainSum: tempData.rainSum,
+    windSpeed: tempData.windSpeed,
+    cloudCover: tempData.cloudCover,
+  });
 
   return (
     <View
@@ -77,7 +57,7 @@ export default function ForecastList({ tempData }: ForecastType) {
           ></LinearGradient>
 
           <View style={{ flexDirection: "row", gap: 5, alignItems: "center" }}>
-            {indicatorsData.map((indicator) => (
+            {indicators.map((indicator) => (
               <View key={indicator.id} style={styles.indicatorContainer}>
                 <Image
                   style={{ width: 16, height: 16 }}
@@ -91,7 +71,7 @@ export default function ForecastList({ tempData }: ForecastType) {
           </View>
         </View>
         <Image
-          source={image}
+          source={image.imageBig}
           style={{
             position: "absolute",
             top: 10,

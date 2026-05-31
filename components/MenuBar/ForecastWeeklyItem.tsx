@@ -1,9 +1,11 @@
-import { StyleSheet, Text, View, Image } from "react-native";
-import React from "react";
+import { colors } from "@/constants/colors";
+import { Typography } from "@/constants/fontsConfiguration";
+import { customStyles } from "@/styles/customStyles";
 import { DayInfo } from "@/types/DayInfo";
 import { WeeklyTemp } from "@/types/WeeklyTemp";
-import { colors } from "@/constants/colors";
-import { findForecastImage } from "@/utils/findForecastImage";
+import { findForecastImage, ForecastImage } from "@/utils/findForecastImage";
+import React from "react";
+import { Image, StyleSheet, Text, View } from "react-native";
 
 type ForecastWeeklyItemType = {
   dayWeather: WeeklyTemp;
@@ -15,13 +17,17 @@ export default function ForecastWeeklyItem({
   currentDay,
 }: ForecastWeeklyItemType) {
   const isToday = currentDay.dayNumber === dayWeather.id;
-  const image = findForecastImage(dayWeather);
+  const image: ForecastImage = findForecastImage(dayWeather);
 
   return (
     <View style={[styles.container, isToday ? styles.containerActive : ""]}>
       <Text style={styles.title}>{dayWeather.weekDay}</Text>
       <View>
-        <Image source={image} resizeMode='contain' style={styles.image} />
+        <Image
+          source={image.imageBig}
+          resizeMode='contain'
+          style={customStyles.tempImageSize}
+        />
       </View>
       <Text style={styles.textTemperature}>{dayWeather.temp}°</Text>
     </View>
@@ -29,11 +35,6 @@ export default function ForecastWeeklyItem({
 }
 
 const styles = StyleSheet.create({
-  image: {
-    width: 32,
-    height: 32,
-  },
-
   container: {
     flexDirection: "column",
     justifyContent: "center",
@@ -62,22 +63,12 @@ const styles = StyleSheet.create({
   },
 
   title: {
-    fontSize: 15,
-    fontWeight: "600",
-    fontStyle: "normal",
-    lineHeight: 20,
-    letterSpacing: -0.5,
-    color: colors.mainText,
+    ...Typography.medium,
     marginBottom: 12,
   },
 
   textTemperature: {
-    fontSize: 20,
-    fontWeight: "400",
-    fontStyle: "normal",
-    lineHeight: 24,
-    letterSpacing: 0.3799999952316284,
-    color: colors.mainText,
+    ...Typography.medium,
     marginTop: 26,
   },
 });

@@ -1,10 +1,11 @@
 export const colors = {
-  blueElements: "hsl(243, 27%, 20%)",
+  blueElements: "hsla(244, 28%, 20%, 0.24)",
   blueElementsLight: "hsl(243, 23%, 24%)",
   blueStroke: "hsl(243, 23%, 30%)",
   grayDark: "hsl(240, 6%, 70%)",
   grayPlaceholders: "hsl(250, 6%, 84%)",
   mainText: "hsl(0, 0%, 100%)",
+  whileOpacity: "hsla(0, 0%, 100%, 0.1)",
   orange: "hsl(28, 100%, 52%)",
   lightBlueElements: "hsl(251, 52%, 34%)",
   darkBlueElements: "hsl(263, 88%, 39%)",
@@ -21,4 +22,8 @@ export const colors = {
   solid: "#E0D9FF",
   textPlaceholder: "#EBEBF599",
   buttonColor: "#2196F3",
+
+  lightBlue: "#958fff49",
+
+  lightPurpule: "#56468D",
 };

@@ -1,5 +1,5 @@
 import { colors } from "@/constants/colors";
-import { Fonts } from "@/constants/theme";
+import { Fonts } from "@/constants/fontsConfiguration";
 import { StyleSheet } from "react-native";
 
 export const customStyles = StyleSheet.create({
@@ -38,9 +38,31 @@ export const customStyles = StyleSheet.create({
     ],
   },
 
+  boxShadowStrength: {
+    boxShadow: [
+      {
+        offsetX: 0,
+        offsetY: 0,
+        blurRadius: 8,
+        spreadDistance: 0,
+      },
+    ],
+  },
+
   textSmall: {
     fontFamily: Fonts.family.regularItalic,
     fontSize: Fonts.size.h6,
     color: colors.mainText,
+  },
+
+  textBig: {
+    fontFamily: Fonts.family.secondary,
+    fontSize: Fonts.size.h3,
+    color: colors.mainText,
+  },
+
+  tempImageSize: {
+    width: 32,
+    height: 32,
   },
 });

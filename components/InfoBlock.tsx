@@ -1,6 +1,6 @@
 import BgToday from "@/assets/images/bg-today-small.svg";
 import { colors } from "@/constants/colors";
-import { Fonts, Typography } from "@/constants/theme";
+import { Fonts, Typography } from "@/constants/fontsConfiguration";
 import React from "react";
 import { Image, StyleSheet, Text, View } from "react-native";
 

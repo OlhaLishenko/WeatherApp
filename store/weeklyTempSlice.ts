@@ -13,22 +13,21 @@ const initialState: State<WeeklyTemp[]> = {
   error: null,
 };
 
-export const fetchData = createAsyncThunk(
+export const fetchWeeklyData = createAsyncThunk(
   "fetch/weeklyTemp",
   async (_, { getState }) => {
     const state = getState() as RootState;
     const { latitude, longitude } = state.coordinates.data as Coordinates;
-
     const currentWeeklyTemp = await loadWeeklyTemp(latitude, longitude);
 
-    return normolizeTempData(currentWeeklyTemp);
+    return normolizeTempData(currentWeeklyTemp, "weekly") as WeeklyTemp[];
   },
 );
 
 export const weeklyTempSlice = createCustomSlice(
   "weeklyTemp",
   initialState,
-  fetchData,
+  fetchWeeklyData,
 );
 export const { actions } = weeklyTempSlice;
 export default weeklyTempSlice.reducer;

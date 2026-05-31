@@ -1,6 +1,6 @@
 export async function findCoordsByCity(newCity: string) {
   const error = "Can not find location";
-  const url = `https://geocoding-api.open-meteo.com/v1/search?name=${newCity}&count=10&language=en&format=json`;
+  const url = `https://geocoding-api.open-meteo.com/v1/search?name=${newCity}&count=10&lang=en&format=json`;
 
   if (newCity.length === 0) {
     throw new Error(`${error}`);

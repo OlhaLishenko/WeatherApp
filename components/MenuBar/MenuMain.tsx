@@ -3,10 +3,11 @@ import { colors } from "@/constants/colors";
 import { ForecastType } from "@/enums/ForecastType";
 import { actions as actionsHourly } from "@/store/hourlyTempSlice";
 import { DayInfo } from "@/types/DayInfo";
-import { HourlyData, HourlyTemp } from "@/types/HourlyTemp";
+import { HourlyTemp } from "@/types/HourlyTemp";
 import { useAppDispatch, useAppSelector } from "@/types/reduxTypes";
+import { normolizeTempData } from "@/utils/normolizeTempData";
 import { LinearGradient } from "expo-linear-gradient";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { Dimensions, StyleSheet, View } from "react-native";
 import { Gesture, GestureDetector } from "react-native-gesture-handler";
 import Animated, {
@@ -31,7 +32,7 @@ export default function MenuMain({ currentDay }: MenuMainType) {
   const { data: coordinates } = useAppSelector((state) => state.coordinates);
   const { latitude, longitude } = coordinates;
   const dispatch = useAppDispatch();
-  const totalHoursPerDay = useRef<number>(24);
+
   const [activeForecastType, setActiveForecastType] = useState<ForecastType>(
     ForecastType.WEEKLY,
   );
@@ -42,44 +43,22 @@ export default function MenuMain({ currentDay }: MenuMainType) {
     const loadHourlyTempData = async () => {
       try {
         const hourlyTempData = await loadHourlyTemp(latitude, longitude);
-        const hourlyData = hourlyTempData.hourly; // { time: [], ...}
+        const hourlyData = hourlyTempData.hourly;
 
-        const startIndex =
-          (currentDay.dayNumber - 2) * totalHoursPerDay.current;
-        const endIndex = startIndex + totalHoursPerDay.current;
+        const normolizedHourlyData = normolizeTempData(
+          hourlyData,
+          "hourly",
+          currentDay,
+        ) as HourlyTemp[];
 
-        const formattedData: HourlyData = {
-          time: hourlyData.time.slice(startIndex, endIndex),
-          temp: hourlyData.temperature_2m.slice(startIndex, endIndex),
-          rainSum: hourlyData.rain.slice(startIndex, endIndex),
-          cloudCover: hourlyData.cloud_cover.slice(startIndex, endIndex),
-          windSpeed: hourlyData.wind_speed_10m.slice(startIndex, endIndex),
-          uvIndex: hourlyData.uv_index.slice(startIndex, endIndex),
-          isDay: hourlyData.is_day.slice(startIndex, endIndex),
-        };
-
-        const hourlyIterationData: HourlyTemp[] = formattedData.time.map(
-          (_: any, index: number) => ({
-            id: index,
-            weatherType: "hourly",
-            time: formattedData.time[index],
-            temp: formattedData.temp[index],
-            rainSum: formattedData.rainSum[index],
-            cloudCover: formattedData.cloudCover[index],
-            windSpeed: formattedData.windSpeed[index],
-            uvIndex: formattedData.uvIndex[index],
-            isDay: formattedData.isDay[index],
-          }),
-        );
-
-        dispatch(actionsHourly.setHourlyTempData(hourlyIterationData));
+        dispatch(actionsHourly.setHourlyTempData(normolizedHourlyData));
       } catch {
         dispatch(actionsHourly.setHourlyTempError());
       }
     };
 
     loadHourlyTempData();
-  }, [currentDay.dayNumber, dispatch, latitude, longitude]);
+  }, [currentDay, currentDay.dayNumber, dispatch, latitude, longitude]);
 
   const menuHeight = useSharedValue(MIN_HEIGHT);
   const startHeight = useSharedValue(MIN_HEIGHT);
@@ -124,8 +103,6 @@ export default function MenuMain({ currentDay }: MenuMainType) {
               <View style={styles.dragLine} />
             </View>
           </GestureDetector>
-
-          {/* <View style={styles.menuBackground}></View> */}
 
           <ForecastOptions
             handleSetActiveForecastType={setActiveForecastType}
@@ -182,9 +159,9 @@ const styles = StyleSheet.create({
 
   menuDisplay: {
     position: "absolute",
-    bottom: 0,
     left: 0,
     right: 0,
+    bottom: 0,
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
     overflow: "hidden",
@@ -193,15 +170,17 @@ const styles = StyleSheet.create({
 
   bottomBarContainer: {
     position: "absolute",
-    bottom: 0,
     left: 0,
     right: 0,
+    bottom: 0,
     zIndex: 2,
   },
 
   menuBackground: {
-    ...StyleSheet.absoluteFillObject,
-    // backgroundColor: "#ffffff",
+    position: "absolute",
+    left: 0,
+    right: 0,
+    bottom: 0,
     backgroundColor: colors.lightBlueElements,
     borderTopLeftRadius: 30,
     borderTopRightRadius: 30,

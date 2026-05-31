@@ -1,8 +1,10 @@
 import { forecastImg } from "@/constants/images";
 import { Levels } from "@/enums/Levels";
+import { CurrentWeather } from "@/types/FavoriteCity";
 import { ForecastSummary } from "@/types/ForecastSummary";
 import { HourlyTemp } from "@/types/HourlyTemp";
 import { WeeklyTemp } from "@/types/WeeklyTemp";
+import { ImageSourcePropType } from "react-native";
 
 const findLevel = (indicator: string, value: number) => {
   switch (indicator) {
@@ -30,7 +32,7 @@ const findLevel = (indicator: string, value: number) => {
 };
 
 const makeForecastInfo = (
-  dayTemp: WeeklyTemp | HourlyTemp,
+  dayTemp: WeeklyTemp | HourlyTemp | CurrentWeather,
 ): ForecastSummary => ({
   temp: dayTemp.temp,
   wind: findLevel("wind", dayTemp.windSpeed),
@@ -38,47 +40,99 @@ const makeForecastInfo = (
   rain: findLevel("rain", dayTemp.rainSum),
 });
 
-export const findForecastImage = (temp: WeeklyTemp | HourlyTemp) => {
+export type ForecastImage = {
+  imageBig: ImageSourcePropType;
+  imageSmall: string;
+  title: string;
+};
+
+export const findForecastImage = (
+  temp: WeeklyTemp | HourlyTemp | CurrentWeather,
+): ForecastImage => {
   const summary: ForecastSummary = makeForecastInfo(temp);
 
   if (summary.rain === Levels.extra && summary.wind === Levels.extra) {
-    return forecastImg.storm;
+    return {
+      imageBig: forecastImg.storm,
+      imageSmall: "🌀",
+      title: "Storm",
+    };
   }
 
   if (summary.wind === Levels.strong || summary.wind === Levels.extra) {
     if (summary.rain === Levels.middle || summary.rain === Levels.strong) {
-      return forecastImg.sunCloudStrongRain;
+      return {
+        imageBig: forecastImg.sunCloudStrongRain,
+        imageSmall: "🌦️",
+        title: "Strong rain",
+      };
     }
-    return forecastImg.sunCloudStrongWing;
+    return {
+      imageBig: forecastImg.sunCloudStrongWind,
+      imageSmall: "🌦️",
+      title: "Strong wind",
+    };
   }
 
   if (summary.rain === Levels.extra) {
-    return forecastImg.rain;
+    return {
+      imageBig: forecastImg.rain,
+      imageSmall: "🌧️",
+      title: "Rain",
+    };
   }
 
   if (summary.rain === Levels.strong) {
-    return forecastImg.sunCloudStrongRain;
+    return {
+      imageBig: forecastImg.sunCloudStrongRain,
+      imageSmall: "☔",
+      title: "Strong rain",
+    };
   }
 
   if (summary.rain === Levels.middle) {
-    return forecastImg.sunCloudMidRain;
+    return {
+      imageBig: forecastImg.sunCloudMidRain,
+      imageSmall: "🌦️",
+      title: "Middle rain",
+    };
   }
 
   if (summary.cloud === Levels.extra) {
-    return forecastImg.cloudy;
+    return {
+      imageBig: forecastImg.cloudly,
+      imageSmall: "☁️",
+      title: "Cloudly",
+    };
   }
 
   if (summary.cloud === Levels.strong) {
-    return forecastImg.fog;
+    return {
+      imageBig: forecastImg.fog,
+      imageSmall: "🌫️",
+      title: "Fog",
+    };
   }
 
   if (summary.cloud === Levels.middle) {
-    return forecastImg.sunCloud;
+    return {
+      imageBig: forecastImg.sunCloud,
+      imageSmall: "🌤️",
+      title: "Partly cloudly",
+    };
   }
 
-  if (summary.rain === Levels.normal && summary.cloud === Levels.middle) {
-    return forecastImg.drizzle;
+  if (summary.rain === Levels.normal && summary.cloud === Levels.normal) {
+    return {
+      imageBig: forecastImg.drizzle,
+      imageSmall: "💧",
+      title: "Drizzle",
+    };
   }
 
-  return forecastImg.sunny;
+  return {
+    imageBig: forecastImg.sunny,
+    imageSmall: "☀️",
+    title: "Sunny",
+  };
 };

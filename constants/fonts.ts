@@ -11,4 +11,7 @@ export const fonts = {
   dmSantItalic: {
     fontFamily: "DMSantItalic",
   },
+  smooth: {
+    fontFamily: "Smooth",
+  },
 };

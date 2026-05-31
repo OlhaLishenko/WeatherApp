@@ -1,5 +1,5 @@
 import { colors } from "@/constants/colors";
-import { Fonts } from "@/constants/theme";
+import { Fonts } from "@/constants/fontsConfiguration";
 import { weatherIndicators } from "@/constants/variables";
 import { LinearGradient } from "expo-linear-gradient";
 import React from "react";
