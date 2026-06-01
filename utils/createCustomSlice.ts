@@ -4,20 +4,25 @@ import {
   createSlice,
   PayloadAction,
 } from "@reduxjs/toolkit";
-import { WeeklyTemp } from "@/types/WeeklyTemp";
 import { State } from "@/types/State";
+
+export const defaultInitialState = <T>(): State<T[]> => ({
+  data: [],
+  loader: false,
+  error: null,
+});
 
 export function createCustomSlice(
   sliceName: string,
-  initialState: State<WeeklyTemp[]>,
-  asyncThunk: AsyncThunk<WeeklyTemp[], void, AsyncThunkConfig>,
+  asyncThunk: AsyncThunk<T[], void, AsyncThunkConfig>,
+  initialState: State<T[]> = defaultInitialState<T>(),
 ) {
   return createSlice({
     name: `${sliceName}`,
     initialState: initialState,
     reducers: {
-      setData(state, action: PayloadAction<WeeklyTemp[]>) {
-        state.data = action.payload;
+      setData(state, action: PayloadAction<T[]>) {
+        state.data = action.payload as State<T[]>["data"];
         state.error = null;
       },
       setError(state) {
@@ -30,8 +35,8 @@ export function createCustomSlice(
       });
       builder.addCase(
         asyncThunk.fulfilled,
-        (state, action: PayloadAction<WeeklyTemp[]>) => {
-          state.data = action.payload;
+        (state, action: PayloadAction<T[]>) => {
+          state.data = action.payload as State<T[]>["data"];
           state.loader = false;
           state.error = null;
         },
@@ -39,7 +44,7 @@ export function createCustomSlice(
       builder.addCase(asyncThunk.rejected, (state) => {
         state.loader = false;
         state.error = "Can not load weekly weather for this location";
-        state.data = [];
+        state.data = [] as State<T[]>["data"];
       });
     },
   });

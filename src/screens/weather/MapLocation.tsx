@@ -84,8 +84,6 @@ export default function MapLocation() {
       timezone: timezone,
     };
 
-    console.log(newLocation);
-
     dispatch(searchCityAction.setData(newLocation));
     dispatch(fetchNewCityTemp());
     setIsModal(false);

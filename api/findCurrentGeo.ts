@@ -9,8 +9,6 @@ export const findCurrentGeo = async () => {
 
   let location = await Location.getCurrentPositionAsync({});
 
-  console.log("current geo" + location.coords.latitude);
-
   return {
     latitude: location.coords.latitude,
     longitude: location.coords.longitude,

@@ -1,16 +1,9 @@
 import { loadWeeklyTemp } from "@/api/loadWeeklyTemp";
-import { State } from "@/types/State";
 import { WeeklyTemp } from "@/types/WeeklyTemp";
 import { createCustomSlice } from "@/utils/createCustomSlice";
 import { normolizeTempData } from "@/utils/normolizeTempData";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { RootState } from "./store";
-
-const initialState: State<WeeklyTemp[]> = {
-  data: [],
-  loader: false,
-  error: null,
-};
 
 export const fetchNewCityTemp = createAsyncThunk(
   "fetch/newCityTemp",
@@ -26,7 +19,6 @@ export const fetchNewCityTemp = createAsyncThunk(
 
 export const searchCityTempSlice = createCustomSlice(
   "searchCityTemp",
-  initialState,
   fetchNewCityTemp,
 );
 

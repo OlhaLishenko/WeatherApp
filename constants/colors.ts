@@ -27,3 +27,26 @@ export const colors = {
 
   lightPurpule: "#56468D",
 };
+
+// constants/colors.ts
+export const colors = {
+  // Фони
+  bgDark: "#1C1B33", // основний фон
+  bgSecondary: "#3C2C77", // другорядні блоки
+  bgTertiary: "#56468D", // третинні поверхні
+  bgAccent: "#c751d2", // градієнт, активні елементи
+
+  // Текст
+  textPrimary: "#ffffff",
+  textSecondary: "#EBEBF599", // placeholder + muted
+
+  // Оверлеї та обводки
+  overlayLight: "rgba(255, 255, 255, 0.14)",
+  overlayDark: "rgba(0, 0, 0, 0.30)",
+  strokeLight: "rgba(255, 255, 255, 0.40)", // border карток
+
+  // Акценти
+  accentBlue: "#2196F3",
+  accentOrange: "#FF7D2A",
+  transparent: "#ffffff00",
+};

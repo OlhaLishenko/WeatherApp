@@ -1,27 +1,5 @@
 import * as Location from "expo-location";
 
-// export async function findCityByCoordinates(
-//   latitude: number,
-//   longitude: number,
-// ) {
-//   try {
-//     const [result] = await Location.reverseGeocodeAsync({
-//       latitude: latitude,
-//       longitude: longitude,
-//     });
-
-//     console.log("timezoneeee " + result.timezone);
-
-//     return {
-//       city: result.city,
-//       country: result.country,
-//       timezone: result.timezone,
-//     };
-//   } catch {
-//     throw new Error("City not found");
-//   }
-// }
-
 export async function findCityByCoordinates(
   latitude: number,
   longitude: number,
@@ -39,8 +17,6 @@ export async function findCityByCoordinates(
   const city = data.address.city || data.address.town || data.address.village;
   const country = data.address.country;
   const timezone = expoResult.timezone;
-
-  console.log("timezoneeee " + timezone);
 
   if (!city || !country) throw new Error("City not found");
 

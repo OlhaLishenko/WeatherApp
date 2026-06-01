@@ -20,9 +20,8 @@ import ForecastInfoHourly from "./ForecastInfoHourly";
 import ForecastInfoWeekly from "./ForecastInfoWeekly";
 import ForecastOptions from "./ForecastOptions";
 import ForecastSlider from "./ForecastSlider";
-const SCREEN_HEIGHT = Dimensions.get("window").height;
-const MIN_HEIGHT = SCREEN_HEIGHT * 0.4; // початкова висота
-const MAX_HEIGHT = SCREEN_HEIGHT * 0.85; // максимальна висота
+import { useBottomSheet } from "@/hooks/useBottomSheet";
+import { useHourlyTemp } from "@/hooks/useHourlyTemp";
 
 type MenuMainType = {
   currentDay: DayInfo;
@@ -31,63 +30,17 @@ type MenuMainType = {
 export default function MenuMain({ currentDay }: MenuMainType) {
   const { data: coordinates } = useAppSelector((state) => state.coordinates);
   const { latitude, longitude } = coordinates;
-  const dispatch = useAppDispatch();
+  useHourlyTemp(latitude, longitude, currentDay);
 
   const [activeForecastType, setActiveForecastType] = useState<ForecastType>(
     ForecastType.WEEKLY,
   );
 
-  useEffect(() => {
-    if (!latitude || !longitude) return;
-
-    const loadHourlyTempData = async () => {
-      try {
-        const hourlyTempData = await loadHourlyTemp(latitude, longitude);
-        const hourlyData = hourlyTempData.hourly;
-
-        const normolizedHourlyData = normolizeTempData(
-          hourlyData,
-          "hourly",
-          currentDay,
-        ) as HourlyTemp[];
-
-        dispatch(actionsHourly.setHourlyTempData(normolizedHourlyData));
-      } catch {
-        dispatch(actionsHourly.setHourlyTempError());
-      }
-    };
-
-    loadHourlyTempData();
-  }, [currentDay, currentDay.dayNumber, dispatch, latitude, longitude]);
-
-  const menuHeight = useSharedValue(MIN_HEIGHT);
-  const startHeight = useSharedValue(MIN_HEIGHT);
-
-  const dragGesture = Gesture.Pan()
-    .onStart(() => {
-      startHeight.value = menuHeight.value;
-    })
-    .onUpdate((event) => {
-      // тягнемо вгору — висота збільшується
-      const newHeight = startHeight.value - event.translationY;
-      menuHeight.value = Math.min(Math.max(newHeight, MIN_HEIGHT), MAX_HEIGHT);
-    })
-    .onEnd(() => {
-      // прилипає до найближчої точки
-      const middle = (MIN_HEIGHT + MAX_HEIGHT) / 2;
-      menuHeight.value = withSpring(
-        menuHeight.value > middle ? MAX_HEIGHT : MIN_HEIGHT,
-        { damping: 20, stiffness: 120 },
-      );
-    });
-
-  const animatedStyle = useAnimatedStyle(() => ({
-    height: menuHeight.value,
-  }));
-
   const weeklyWeather = useAppSelector((state) => state.weeklyTemp.data);
   const hourlyWeather = useAppSelector((state) => state.hourlyTemp.data);
   const isWeeklyWeatherData = activeForecastType === ForecastType.WEEKLY;
+
+  const { dragGesture, animatedStyle } = useBottomSheet();
 
   return (
     <>

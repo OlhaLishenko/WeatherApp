@@ -11,26 +11,6 @@ type ForecastWeeklyDataListType = {
   currentDay: DayInfo;
 };
 
-type Indicators = {
-  title: string;
-  component: React.ComponentType<any>;
-}[];
-
-const additionIndicators: Indicators = [
-  {
-    title: "Sunrise",
-    component: lazy(() => import("./../Indicators/Sunrise")),
-  },
-  {
-    title: "Sunrise",
-    component: lazy(() => import("./../Indicators/Sunrise")),
-  },
-  {
-    title: "Sunrise",
-    component: lazy(() => import("./../Indicators/Sunrise")),
-  },
-];
-
 export const ForecastWeeklyDataList = ({
   weeklyWeather,
   currentDay,
@@ -73,13 +53,6 @@ export default function ForecastInfoWeekly({
             currentDay={currentDay}
           />
         </ForecastSlider>
-        <View style={{ flexDirection: "row" }}>
-          {/* <FlatList
-            data={additionIndicators}
-            renderItem={({ item }) => <ForecastAdditionInfo context={item} />}
-            numColumns={2}
-          /> */}
-        </View>
       </View>
     </ScrollView>
   );

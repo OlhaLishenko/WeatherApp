@@ -1,4 +1,3 @@
-//#region imports
 import { loadCurrentTemp } from "@/api/loadCurrentTemp";
 import MenuMain from "@/components/MenuBar/MenuMain";
 import { colors } from "@/constants/colors";
@@ -16,12 +15,10 @@ import { Image, ImageBackground, StyleSheet, Text, View } from "react-native";
 
 const imageBg = require("@/assets/images/bg-main.png");
 const imageHome = require("@/assets/images/House.png");
-//#endregion
 
 export default function HomePage() {
   const coordinates = useAppSelector((state) => state.coordinates);
   const locationName = useAppSelector((state) => state.locationName);
-  const weeklyTemp = useAppSelector((state) => state.weeklyTemp);
   const dispatch = useAppDispatch();
 
   const [currentTemp, setCurrentTemp] = useState<CurrentWeather | null>(null);
@@ -42,7 +39,7 @@ export default function HomePage() {
         );
 
         setCurrentTemp({
-          temp: currentWeather.temperature,
+          temp: Math.round(currentWeather.temperature),
           rainSum: currentWeather.rain,
           cloudCover: currentWeather.cloudCover,
           windSpeed: currentWeather.windSpeed,
@@ -64,11 +61,6 @@ export default function HomePage() {
   ]);
 
   const currentDay: DayInfo = getCurrentDay();
-
-  // const currentTemp = weeklyTemp.data[currentDay.dayNumber]?.temp;
-
-  console.log(currentTemp);
-  console.log("location " + locationName.city);
 
   return (
     <View style={{ flex: 1 }}>
